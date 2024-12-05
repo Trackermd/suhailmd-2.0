@@ -1,0 +1,33 @@
+name: Deploy Bot
+
+on:
+  push:
+    branches:
+      - main  # Adjust this to your deployment branch
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16  # Ensure this matches your project requirements
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Add Session ID
+      env:
+        SESSION_ID: ${{ secrets.SESSION_ID }}  # Reference your secret here
+      run: |
+        echo $SESSION_ID > session.json
+        echo "Session ID added."
+
+    - name: Start the bot
+      run: node index.js  # Replace `index.js` with your bot's entry fil
